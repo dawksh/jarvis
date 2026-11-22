@@ -19,7 +19,7 @@ func Route(ctx context.Context, c Config, instruction, override string) Selectio
 		return Selection{override, "override", 1}
 	}
 	fallback := Selection{"standard", "fallback", 0}
-	key := os.Getenv("OPENROUTER_API_KEY")
+	key := os.Getenv("TYPESAFE_API_KEY")
 	if key == "" {
 		return fallback
 	}

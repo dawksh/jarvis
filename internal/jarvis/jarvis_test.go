@@ -125,7 +125,7 @@ func (f *fakeSupervisor) Launch(_ context.Context, _ string, r RunRequest) error
 func (f *fakeSupervisor) Alive(context.Context, string) (bool, error) { return f.alive, f.healthErr }
 func (f *fakeSupervisor) Stop(context.Context, string) error          { f.stops++; f.alive = false; return nil }
 func TestExecutionRestartAndEventReplay(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir(), alive: true}
@@ -173,7 +173,7 @@ func TestExecutionRestartAndEventReplay(t *testing.T) {
 	}
 }
 func TestUncertainSideEffectRequiresOwner(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir()}
@@ -197,7 +197,7 @@ func TestUncertainSideEffectRequiresOwner(t *testing.T) {
 	}
 }
 func TestCancelWaitsForTermination(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir(), alive: true}
@@ -223,7 +223,7 @@ func TestCancelWaitsForTermination(t *testing.T) {
 	}
 }
 func TestRouterContractAndFallback(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "secret")
+	t.Setenv("TYPESAFE_API_KEY", "secret")
 	c := testConfig(t)
 	body := `{"answers":{"tier":{"type":"choice","choice":"heavy","confidence":0.95}}}`
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -256,12 +256,12 @@ func TestRunnerContractAndSecretIsolation(t *testing.T) {
 	dir := t.TempDir()
 	workspace := t.TempDir()
 	fake := filepath.Join(t.TempDir(), "codex")
-	script := "#!/bin/sh\nif [ -n \"$TELEGRAM_BOT_TOKEN$OPENROUTER_API_KEY\" ]; then exit 99; fi\ncat >/dev/null\nprintf '%s\\n' '{\"type\":\"thread.started\",\"thread_id\":\"fake\"}'\n"
+	script := "#!/bin/sh\nif [ -n \"$TELEGRAM_BOT_TOKEN$TYPESAFE_API_KEY\" ]; then exit 99; fi\ncat >/dev/null\nprintf '%s\\n' '{\"type\":\"thread.started\",\"thread_id\":\"fake\"}'\n"
 	if e := os.WriteFile(fake, []byte(script), 0700); e != nil {
 		t.Fatal(e)
 	}
 	t.Setenv("TELEGRAM_BOT_TOKEN", "private")
-	t.Setenv("OPENROUTER_API_KEY", "private")
+	t.Setenv("TYPESAFE_API_KEY", "private")
 	r := RunRequest{Codex: fake, Workspace: workspace, Model: "normal", Reasoning: "medium", Session: "explicit", Prompt: "test", Timeout: time.Second}
 	if e := writeJSON(filepath.Join(dir, "request.json"), r); e != nil {
 		t.Fatal(e)
@@ -308,7 +308,7 @@ func TestBackupRestore(t *testing.T) {
 }
 
 func TestReasoningEscalationAndRetryBound(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	c.MaxAttempts = 4
@@ -350,7 +350,7 @@ func TestReasoningEscalationAndRetryBound(t *testing.T) {
 	}
 }
 func TestProviderResetAndNoInfrastructureEscalation(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir()}
@@ -406,7 +406,7 @@ func TestOutboxRedactionEditAndRetry(t *testing.T) {
 	s := testStore(t)
 	c := testConfig(t)
 	t.Setenv("TELEGRAM_BOT_TOKEN", "BOT-SECRET")
-	t.Setenv("OPENROUTER_API_KEY", "JEV-SECRET")
+	t.Setenv("TYPESAFE_API_KEY", "JEV-SECRET")
 	method := ""
 	var text string
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -434,7 +434,7 @@ func TestOutboxRedactionEditAndRetry(t *testing.T) {
 	}
 }
 func TestUnknownProcessRetainsSlot(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir(), healthErr: os.ErrPermission}
@@ -506,7 +506,7 @@ func TestStoreRestartAndFutureSchema(t *testing.T) {
 	}
 }
 func TestPartialEventDoesNotAdvanceOffset(t *testing.T) {
-	t.Setenv("OPENROUTER_API_KEY", "")
+	t.Setenv("TYPESAFE_API_KEY", "")
 	s := testStore(t)
 	c := testConfig(t)
 	f := &fakeSupervisor{dir: t.TempDir(), alive: true}

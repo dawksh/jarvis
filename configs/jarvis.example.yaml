@@ -8,8 +8,8 @@ backend: systemd
 timeout: 2h
 max_attempts: 5
 max_queue: 50
-jev_endpoint: https://openrouter.ai/api/alpha/decisions
-jev_model: typesafe/jev-1.14
+jev_endpoint: https://api.typesafe.ai/v1/systemone
+jev_model: jev-latest
 confidence: 0.70
 tiers:
   light:

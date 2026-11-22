@@ -139,8 +139,8 @@ func doctor(ctx context.Context, c jarvis.Config) error {
 		failures = append(failures, "TELEGRAM_BOT_TOKEN")
 		fmt.Println("TELEGRAM_BOT_TOKEN: missing")
 	}
-	if os.Getenv("OPENROUTER_API_KEY") == "" {
-		fmt.Println("OPENROUTER_API_KEY: missing; routing uses standard fallback")
+	if os.Getenv("TYPESAFE_API_KEY") == "" {
+		fmt.Println("TYPESAFE_API_KEY: missing; routing uses standard fallback")
 	}
 	if c.Backend == "systemd" {
 		check("systemd user manager", exec.CommandContext(ctx, "systemctl", "--user", "show-environment"))

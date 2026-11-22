@@ -15,8 +15,10 @@ Copy `configs/jarvis.example.yaml` to an external configuration directory. Set p
 numeric Telegram owner/private-chat IDs and model IDs verified against your Codex subscription.
 The CLI contract currently targets **codex-cli 0.171.0**. Authenticate as the dedicated
 `jarvis` OS user with `codex login --device-auth`. Provide `TELEGRAM_BOT_TOKEN` and
-`OPENROUTER_API_KEY` in a mode-0600 environment file; the latter is optional during outages
-and missing credentials cause routing to fall back to standard.
+`TYPESAFE_API_KEY` in a mode-0600 environment file; the latter is optional during outages
+and missing credentials cause routing to fall back to standard. Jev calls use your TypeSafe
+account directly. If you have an older configuration, replace `jev_endpoint` with
+`https://api.typesafe.ai/v1/systemone` and `jev_model` with `jev-latest`.
 
 ```sh
 jarvis -config /absolute/path/jarvis.yaml doctor

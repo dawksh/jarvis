@@ -127,7 +127,7 @@ func (s *Service) Deliver(ctx context.Context) error {
 	if e != nil {
 		return e
 	}
-	for _, key := range []string{"TELEGRAM_BOT_TOKEN", "OPENROUTER_API_KEY"} {
+	for _, key := range []string{"TELEGRAM_BOT_TOKEN", "TYPESAFE_API_KEY"} {
 		if v := os.Getenv(key); v != "" {
 			text = strings.ReplaceAll(text, v, "[redacted]")
 		}

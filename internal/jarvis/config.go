@@ -37,7 +37,7 @@ type Config struct {
 }
 
 func LoadConfig(path string) (Config, error) {
-	c := Config{Codex: "codex", Backend: "systemd", Timeout: 2 * time.Hour, MaxAttempts: 5, MaxQueue: 50, JevEndpoint: "https://openrouter.ai/api/alpha/decisions", JevModel: "typesafe/jev-1.14", Confidence: .7}
+	c := Config{Codex: "codex", Backend: "systemd", Timeout: 2 * time.Hour, MaxAttempts: 5, MaxQueue: 50, JevEndpoint: "https://api.typesafe.ai/v1/systemone", JevModel: "jev-latest", Confidence: .7}
 	b, e := os.ReadFile(path)
 	if e != nil {
 		return c, e
