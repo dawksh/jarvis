@@ -1,0 +1,31 @@
+# Copy to jarvis.yaml outside Git, set verified model IDs and owner identifiers.
+data_dir: /var/lib/jarvis/state
+work_dir: /var/lib/jarvis/workspaces
+owner_id: 0
+chat_id: 0
+codex: /usr/local/bin/codex
+backend: systemd
+timeout: 2h
+max_attempts: 5
+max_queue: 50
+jev_endpoint: https://openrouter.ai/api/alpha/decisions
+jev_model: typesafe/jev-1.14
+confidence: 0.70
+tiers:
+  light:
+    model: ${CODEX_LIGHT_MODEL}
+    reasoning: low
+  standard:
+    model: ${CODEX_STANDARD_MODEL}
+    reasoning: medium
+  heavy:
+    model: ${CODEX_HEAVY_MODEL}
+    reasoning: high
+servers:
+  u1:
+    type: local
+  u2:
+    type: ssh
+    host: 100.74.109.116
+    user: jarvis
+    identity_file: /var/lib/jarvis/ssh/id_ed25519

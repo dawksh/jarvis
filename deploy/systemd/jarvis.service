@@ -1,0 +1,19 @@
+# User service: install in ~jarvis/.config/systemd/user/jarvis.service.
+[Unit]
+Description=Jarvis personal agent
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/jarvis
+EnvironmentFile=/var/lib/jarvis/config/jarvis.env
+ExecStart=/usr/local/bin/jarvis -config /var/lib/jarvis/config/jarvis.yaml serve
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+UMask=0077
+MemoryHigh=150M
+MemoryMax=256M
+
+[Install]
+WantedBy=default.target

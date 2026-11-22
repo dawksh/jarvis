@@ -1,0 +1,14 @@
+/plan.md
+/bin/
+/.env
+/.env.*
+!.env.example
+/var/
+*.db
+*.db-shm
+*.db-wal
+*.log
+coverage.out
+.DS_Store
+
+/configs/jarvis.yaml
