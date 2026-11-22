@@ -535,3 +535,26 @@ func TestPartialEventDoesNotAdvanceOffset(t *testing.T) {
 		t.Fatal(tasks)
 	}
 }
+
+func TestResumeRetainsInstructionsFromInterruptedAttempt(t *testing.T) {
+	t.Setenv("TYPESAFE_API_KEY", "")
+	s := testStore(t)
+	c := testConfig(t)
+	f := &fakeSupervisor{dir: t.TempDir()}
+	service := Service{Config: c, Store: s, Supervisor: f}
+	accept(t, s, c, 1, "deploy application")
+	tasks, _ := s.Tasks()
+	id := tasks[0].ID
+	if _, e := s.Exec("UPDATE tasks SET session='existing-session' WHERE id=?", id); e != nil {
+		t.Fatal(e)
+	}
+	if _, e := s.Exec("INSERT INTO instructions(task_id,content,applied) VALUES(?,?,1)", id, "Use PostgreSQL"); e != nil {
+		t.Fatal(e)
+	}
+	if e := service.Tick(context.Background()); e != nil {
+		t.Fatal(e)
+	}
+	if f.request.Session != "existing-session" || !strings.Contains(f.request.Prompt, "Use PostgreSQL") {
+		t.Fatalf("resumed prompt lost owner instruction: %+v", f.request)
+	}
+}

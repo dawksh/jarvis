@@ -183,7 +183,6 @@ func (s *Service) Tick(ctx context.Context) error {
 	if e != nil {
 		return e
 	}
-	var pending strings.Builder
 	var instructionIDs []int64
 	rows, e := s.Store.Query("SELECT id,content FROM instructions WHERE task_id=? AND applied=0 ORDER BY id", t.ID)
 	if e != nil {
@@ -197,7 +196,7 @@ func (s *Service) Tick(ctx context.Context) error {
 			return e
 		}
 		instructionIDs = append(instructionIDs, id)
-		pending.WriteString("\nOwner follow-up:\n" + content)
+
 	}
 	e = rows.Err()
 	rows.Close()
@@ -263,10 +262,7 @@ func (s *Service) Tick(ctx context.Context) error {
 	if t.Session != "" {
 		prompt += "\nThis is a resumed task. Reconcile existing effects before continuing. Previous result: " + t.Summary
 	}
-	if t.Session != "" {
-		prompt += pending.String()
-	}
-	if t.Session == "" {
+	{
 		var history string
 		r, e := s.Store.Query("SELECT content FROM instructions WHERE task_id=? AND applied=1 ORDER BY id", t.ID)
 		if e != nil {
